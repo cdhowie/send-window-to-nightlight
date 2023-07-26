@@ -103,9 +103,10 @@ fi
 
 cleanup() {
 	rm "$img"
+	trap - INT HUP TERM
 }
 
-trap cleanup EXIT
+trap 'cleanup; exit 2' INT HUP TERM
 
 if ! scrot -o -u "$img"; then
 	fail "Failed to take screenshot."
@@ -114,8 +115,11 @@ fi
 if ! resp="$(
 	curl -s https://api.nightlight.gg/v1/upload -H "authorization: Bearer $apikey" -F "file=@\"$img\";type=image/png;filename=\"$(date '+%F %T').png\""
 )"; then
+	cleanup
 	fail "Failed to upload screenshot."
 fi
+
+cleanup
 
 if ! url="$(echo "$resp" | jq -r .data.url)"; then
 	fail "jq invocation failed."
