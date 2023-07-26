@@ -72,6 +72,16 @@ require_any() {
 	fail "Requires one of: $@. Please install one using your distribution's package manager."
 }
 
+screenshot() {
+	if has_bin scrot; then
+		scrot --overwrite --focused "$1"
+	elif has_bin spectacle; then
+		spectacle --activewindow --background --no-decoration --nonotify --output "$1"
+	else
+		fail "Missing scrot or spectacle."
+	fi
+}
+
 browse() {
 	for bin in xdg-open sensible-browser; do
 		if has_bin "$bin"; then
@@ -92,7 +102,7 @@ fi
 
 require_any zenity kdialog xmessage
 require_any xdg-open sensible-browser
-require scrot
+require_any scrot spectacle
 require curl
 require jq
 require mktemp
@@ -109,7 +119,7 @@ cleanup() {
 
 trap 'cleanup; exit 2' INT HUP TERM
 
-if ! scrot --overwrite --focused "$img"; then
+if ! screenshot "$img"; then
 	fail "Failed to take screenshot."
 fi
 
