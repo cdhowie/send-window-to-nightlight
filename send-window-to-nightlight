@@ -29,10 +29,16 @@
 #
 # # ./send-window-to-nightlight 'VGF4YXRpb24gaXMgdGhlZnQK'
 #
+# Alternatively, you can uncomment the FORCE_API_KEY line below this comment
+# and set your API key there, replacing the example API key.
+#
 # Many Linux desktop environments provide a "global shortcut" facility whereby
 # a command can be executed in response to a user-defined combination of keys
 # being pressed, no matter which window is currently active.  This is the
 # intended way to run this script, as it will screenshot the active window.
+
+
+# FORCE_API_KEY='VGF4YXRpb24gaXMgdGhlZnQK'
 
 
 has_bin() {
@@ -93,7 +99,11 @@ browse() {
 	fail "Missing xdg-open or sensible-browser."
 }
 
-apikey="$1"
+if [ -z "$FORCE_API_KEY" ]; then
+	apikey="$1"
+else
+	apikey="$FORCE_API_KEY"
+fi
 
 if [ -z "$apikey" ]; then
 	echo "Usage: $0 <nightlight-apikey>" 1>&2
