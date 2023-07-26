@@ -96,6 +96,7 @@ require scrot
 require curl
 require jq
 require mktemp
+require date
 
 if ! img="$(mktemp dbd.XXXXXXXX.png)"; then
 	fail "Failed to create temporary file for screenshot."
