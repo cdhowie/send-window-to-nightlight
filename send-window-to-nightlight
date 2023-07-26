@@ -114,7 +114,7 @@ if ! scrot --overwrite --focused "$img"; then
 fi
 
 if ! resp="$(
-	curl --silent https://api.nightlight.gg/v1/upload --header "authorization: Bearer $apikey" --form "file=@\"$img\";type=image/png;filename=\"$(date '+%F %T').png\""
+	curl --fail --silent https://api.nightlight.gg/v1/upload --header "authorization: Bearer $apikey" --form "file=@\"$img\";type=image/png;filename=\"$(date '+%F %T').png\""
 )"; then
 	cleanup
 	fail "Failed to upload screenshot."
