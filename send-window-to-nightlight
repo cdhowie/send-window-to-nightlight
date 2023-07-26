@@ -109,12 +109,12 @@ cleanup() {
 
 trap 'cleanup; exit 2' INT HUP TERM
 
-if ! scrot -o -u "$img"; then
+if ! scrot --overwrite --focused "$img"; then
 	fail "Failed to take screenshot."
 fi
 
 if ! resp="$(
-	curl -s https://api.nightlight.gg/v1/upload -H "authorization: Bearer $apikey" -F "file=@\"$img\";type=image/png;filename=\"$(date '+%F %T').png\""
+	curl --silent https://api.nightlight.gg/v1/upload --header "authorization: Bearer $apikey" --form "file=@\"$img\";type=image/png;filename=\"$(date '+%F %T').png\""
 )"; then
 	cleanup
 	fail "Failed to upload screenshot."
